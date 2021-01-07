@@ -1,7 +1,6 @@
 package com.example.sensorservice.config;
 
-import com.example.sensorservice.model.CameraDTO;
-import com.example.sensorservice.service.CameraSenderService;
+import com.example.sensorservice.model.RFSensorDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,13 +16,13 @@ import java.util.Map;
 
 
 @Configuration
-public class CameraSenderConfig {
+public class RFSensorSenderConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServer;
 
     @Bean
-    public ProducerFactory<String, CameraDTO> producerCameraFactory() {
+    public ProducerFactory<String, RFSensorDTO> producerRSSensorFactory() {
         Map<String, Object> configProperties = new HashMap<>();
         configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -32,12 +31,12 @@ public class CameraSenderConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, CameraDTO> cameraKafkaTemplate() {
-        return new KafkaTemplate<>(producerCameraFactory());
+    public KafkaTemplate<String, RFSensorDTO> rfSensorKafkaTemplate() {
+        return new KafkaTemplate<>(producerRSSensorFactory());
     }
 
     @Bean
-    public CameraSenderService cameraSender() {
-        return new CameraSenderService();
+    public RFSensorSenderConfig rfSensorSender() {
+        return new RFSensorSenderConfig();
     }
 }

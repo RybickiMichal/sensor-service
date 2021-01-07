@@ -35,7 +35,7 @@ public class CameraController {
         return cameraService.updateSensor(id, camera);
     }
 
-    @GetMapping(value = "/camera")
+    @GetMapping(value = "/camera-sensors")
     public List<Camera> getCameraSensors() {
         return cameraService.getCameraSensors();
     }
