@@ -26,8 +26,8 @@ public class CameraController {
     }
 
     @DeleteMapping(value = "/camera/unregister/{id}")
-    public void unregisterCameraSensor(@PathVariable String id) {
-        cameraService.unregisterSensor(id);
+    public Sensor unregisterCameraSensor(@PathVariable String id) {
+        return cameraService.unregisterSensor(id);
     }
 
     @PutMapping(value = "/camera/update/{id}")

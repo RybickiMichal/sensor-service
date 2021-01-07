@@ -1,6 +1,5 @@
 package com.example.sensorservice.service;
 
-import com.example.sensorservice.model.Camera;
 import com.example.sensorservice.model.RFSensor;
 import com.example.sensorservice.model.Sensor;
 import com.example.sensorservice.repository.RFSensorRepository;
@@ -22,9 +21,11 @@ public class RFSensorService implements SensorService {
     }
 
     @Override
-    public void unregisterSensor(String id) {
+    public Sensor unregisterSensor(String id) {
         //TODO validate isSensorExists
+        RFSensor rfSensor = rfSensorRepository.findById(id).get();
         rfSensorRepository.deleteById(id);
+        return rfSensor;
     }
 
     @Override

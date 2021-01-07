@@ -6,7 +6,7 @@ public interface SensorService {
 
     Sensor registerSensor(Sensor sensor);
 
-    void unregisterSensor(String id);
+    Sensor unregisterSensor(String id);
 
     Sensor updateSensor(String id, Sensor sensor);
 
