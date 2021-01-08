@@ -32,6 +32,7 @@ public class CameraService implements SensorService {
     @Override
     public Sensor unregisterSensor(String id) {
         Camera camera = cameraRepository.findById(id).orElseThrow(() -> new InvalidSensorException("Camera Sensor with given id does't exist"));
+        cameraValidationService.validateIsCameraSensorExistsAndSensorStatusIsActive(id);
         Camera inactiveCamera = Camera.builder()
                 .sensorStatus(SensorStatus.INACTIVE)
                 .id(camera.getId())
@@ -46,7 +47,8 @@ public class CameraService implements SensorService {
 
     @Override
     public Sensor updateSensor(String id, Sensor sensor) {
-        cameraValidationService.validateIsCameraSensorExists(id);
+        cameraValidationService.validateIsCameraSensorExistsAndSensorStatusIsActive(id);
+        cameraValidationService.validateCameraSensorStatus(sensor);
         Camera updatedCamera = cameraRepository.save((Camera) sensor);
         cameraSenderService.send(new CameraDTO(updatedCamera, SensorOperation.UPDATED));
         return updatedCamera;

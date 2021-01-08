@@ -31,6 +31,7 @@ public class RFSensorService implements SensorService {
     @Override
     public Sensor unregisterSensor(String id) {
         RFSensor rfSensor = rfSensorRepository.findById(id).orElseThrow(() -> new InvalidSensorException("RF Sensor with given id does't exist"));
+        rfSensorValidationService.validateIsRFSensorExistsAndSensorStatusIsActive(id);
         RFSensor inactiveRFSensor = RFSensor.builder()
                 .sensorStatus(SensorStatus.INACTIVE)
                 .id(rfSensor.getId())
@@ -45,7 +46,8 @@ public class RFSensorService implements SensorService {
 
     @Override
     public Sensor updateSensor(String id, Sensor sensor) {
-        rfSensorValidationService.validateIsRFSensorExists(id);
+        rfSensorValidationService.validateIsRFSensorExistsAndSensorStatusIsActive(id);
+        rfSensorValidationService.validateRFSensorStatus(sensor);
         RFSensor rfSensor = rfSensorRepository.save((RFSensor) sensor);
         rfSensorSenderService.send(new RFSensorDTO(rfSensor, SensorOperation.UPDATED));
         return rfSensor;

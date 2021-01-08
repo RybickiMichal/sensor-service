@@ -56,7 +56,7 @@ class RFSensorServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenUnregisteringRFSensor() {
+    void shouldThrowExceptionWhenUnregisteringAndThereIsNoGivenSensor() {
         when(rfSensorRepository.findById(any())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> rfSensorService.unregisterSensor(correctActiveRFSensor().getId()))

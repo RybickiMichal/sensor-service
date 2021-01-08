@@ -56,7 +56,7 @@ class CameraServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenUnregisteringCamera() {
+    void shouldThrowExceptionWhenUnregisteringAndThereIsNoGivenSensor() {
         when(cameraRepository.findById(any())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> cameraService.unregisterSensor(correctActiveCamera().getId()))
