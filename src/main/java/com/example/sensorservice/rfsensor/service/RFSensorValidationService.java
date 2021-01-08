@@ -11,7 +11,7 @@ public class RFSensorValidationService {
 
     private RFSensorRepository rfSensorRepository;
 
-    public void validateRFSensorExists(String id) {
+    public void validateIsRFSensorExists(String id) {
         if (!rfSensorRepository.existsById(id)) {
             throw new InvalidSensorException("RF Sensor with given id does't exist");
         }

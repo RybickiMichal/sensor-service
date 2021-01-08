@@ -11,7 +11,7 @@ public class CameraValidationService {
 
     private CameraRepository cameraRepository;
 
-    public void validateCameraSensorExists(String id) {
+    public void validateIsCameraSensorExists(String id) {
         if (!cameraRepository.existsById(id)) {
             throw new InvalidSensorException("Camera Sensor with given id does't exist");
         }

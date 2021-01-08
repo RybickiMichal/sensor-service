@@ -1,5 +1,6 @@
 package com.example.sensorservice.rfsensor.service;
 
+import com.example.sensorservice.common.exception.InvalidSensorException;
 import com.example.sensorservice.common.model.RFSensor;
 import com.example.sensorservice.common.model.RFSensorDTO;
 import com.example.sensorservice.common.model.Sensor;
@@ -29,23 +30,22 @@ public class RFSensorService implements SensorService {
 
     @Override
     public Sensor unregisterSensor(String id) {
-        rfSensorValidationService.validateRFSensorExists(id);
-        RFSensor rfSensor = rfSensorRepository.findById(id).get();
-        rfSensorRepository.save(
-                RFSensor.builder()
-                        .sensorStatus(SensorStatus.INACTIVE)
-                        .id(rfSensor.getId())
-                        .ip(rfSensor.getIp())
-                        .maxFrequency(rfSensor.getMaxFrequency())
-                        .minFrequency(rfSensor.getMinFrequency())
-                        .build());
+        RFSensor rfSensor = rfSensorRepository.findById(id).orElseThrow(() -> new InvalidSensorException("RF Sensor with given id does't exist"));
+        RFSensor inactiveRFSensor = RFSensor.builder()
+                .sensorStatus(SensorStatus.INACTIVE)
+                .id(rfSensor.getId())
+                .ip(rfSensor.getIp())
+                .maxFrequency(rfSensor.getMaxFrequency())
+                .minFrequency(rfSensor.getMinFrequency())
+                .build();
+        rfSensorRepository.save(inactiveRFSensor);
         rfSensorSenderService.send(new RFSensorDTO(rfSensor, SensorOperation.UNREGISTERED));
-        return rfSensor;
+        return inactiveRFSensor;
     }
 
     @Override
     public Sensor updateSensor(String id, Sensor sensor) {
-        rfSensorValidationService.validateRFSensorExists(id);
+        rfSensorValidationService.validateIsRFSensorExists(id);
         RFSensor rfSensor = rfSensorRepository.save((RFSensor) sensor);
         rfSensorSenderService.send(new RFSensorDTO(rfSensor, SensorOperation.UPDATED));
         return rfSensor;
