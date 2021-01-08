@@ -1,7 +1,7 @@
-package com.example.sensorservice.config;
+package com.example.sensorservice.camerasensor.config;
 
-import com.example.sensorservice.model.CameraDTO;
-import com.example.sensorservice.service.CameraSenderService;
+import com.example.sensorservice.common.model.CameraDTO;
+import com.example.sensorservice.camerasensor.service.CameraSenderService;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;

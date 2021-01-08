@@ -1,4 +1,4 @@
-package com.example.sensorservice.model;
+package com.example.sensorservice.common.model;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.example.sensorservice.repository;
+package com.example.sensorservice.camerasensor.repository;
 
-import com.example.sensorservice.model.Camera;
+import com.example.sensorservice.common.model.Camera;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

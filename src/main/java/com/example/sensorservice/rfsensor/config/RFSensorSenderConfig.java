@@ -1,6 +1,6 @@
-package com.example.sensorservice.config;
+package com.example.sensorservice.rfsensor.config;
 
-import com.example.sensorservice.model.RFSensorDTO;
+import com.example.sensorservice.common.model.RFSensorDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;

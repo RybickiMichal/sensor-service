@@ -1,10 +1,11 @@
-package com.example.sensorservice.service;
+package com.example.sensorservice.camerasensor.service;
 
-import com.example.sensorservice.model.Camera;
-import com.example.sensorservice.model.CameraDTO;
-import com.example.sensorservice.model.Sensor;
-import com.example.sensorservice.model.SensorOperation;
-import com.example.sensorservice.repository.CameraRepository;
+import com.example.sensorservice.common.model.Camera;
+import com.example.sensorservice.common.model.CameraDTO;
+import com.example.sensorservice.common.model.Sensor;
+import com.example.sensorservice.common.model.SensorOperation;
+import com.example.sensorservice.common.service.SensorService;
+import com.example.sensorservice.camerasensor.repository.CameraRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

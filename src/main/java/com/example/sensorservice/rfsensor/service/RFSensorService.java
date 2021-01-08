@@ -1,10 +1,11 @@
-package com.example.sensorservice.service;
+package com.example.sensorservice.rfsensor.service;
 
-import com.example.sensorservice.model.RFSensor;
-import com.example.sensorservice.model.RFSensorDTO;
-import com.example.sensorservice.model.Sensor;
-import com.example.sensorservice.model.SensorOperation;
-import com.example.sensorservice.repository.RFSensorRepository;
+import com.example.sensorservice.common.model.RFSensor;
+import com.example.sensorservice.common.model.RFSensorDTO;
+import com.example.sensorservice.common.model.Sensor;
+import com.example.sensorservice.common.model.SensorOperation;
+import com.example.sensorservice.rfsensor.repository.RFSensorRepository;
+import com.example.sensorservice.common.service.SensorService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

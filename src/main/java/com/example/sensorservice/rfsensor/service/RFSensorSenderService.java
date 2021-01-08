@@ -1,7 +1,7 @@
-package com.example.sensorservice.service;
+package com.example.sensorservice.rfsensor.service;
 
 
-import com.example.sensorservice.model.CameraDTO;
+import com.example.sensorservice.common.model.RFSensorDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,26 +13,26 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Service
 @Slf4j
-public class CameraSenderService {
+public class RFSensorSenderService {
 
     @Autowired
-    private KafkaTemplate<String, CameraDTO> kafkaTemplate;
+    private KafkaTemplate<String, RFSensorDTO> kafkaTemplate;
 
-    @Value("${kafka.camera.topic}")
+    @Value("${kafka.rf.sensor.topic}")
     private String kafkaTopic;
 
-    public void send(CameraDTO cameraDTO) {
-        ListenableFuture<SendResult<String, CameraDTO>> future = kafkaTemplate.send(kafkaTopic, cameraDTO);
+    public void send(RFSensorDTO rfSensorDTO) {
+        ListenableFuture<SendResult<String, RFSensorDTO>> future = kafkaTemplate.send(kafkaTopic, rfSensorDTO);
 
         future.addCallback(new ListenableFutureCallback<>() {
             @Override
-            public void onSuccess(SendResult<String, CameraDTO> result) {
-                log.info("Sent message: " + cameraDTO.toString());
+            public void onSuccess(SendResult<String, RFSensorDTO> result) {
+                log.info("Sent message: " + rfSensorDTO.toString());
             }
 
             @Override
             public void onFailure(Throwable ex) {
-                log.error("Unable to send message : " + cameraDTO.toString(), ex);
+                log.error("Unable to send message : " + rfSensorDTO.toString(), ex);
             }
         });
     }

@@ -1,8 +1,8 @@
-package com.example.sensorservice.controller;
+package com.example.sensorservice.rfsensor.controller;
 
-import com.example.sensorservice.model.RFSensor;
-import com.example.sensorservice.model.Sensor;
-import com.example.sensorservice.service.RFSensorService;
+import com.example.sensorservice.common.model.RFSensor;
+import com.example.sensorservice.common.model.Sensor;
+import com.example.sensorservice.rfsensor.service.RFSensorService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

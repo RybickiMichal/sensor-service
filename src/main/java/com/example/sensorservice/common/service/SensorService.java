@@ -1,6 +1,6 @@
-package com.example.sensorservice.service;
+package com.example.sensorservice.common.service;
 
-import com.example.sensorservice.model.Sensor;
+import com.example.sensorservice.common.model.Sensor;
 
 public interface SensorService {
 
