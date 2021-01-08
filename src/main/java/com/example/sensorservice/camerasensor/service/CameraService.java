@@ -19,10 +19,10 @@ public class CameraService implements SensorService {
 
     private CameraRepository cameraRepository;
     private CameraSenderService cameraSenderService;
+    private CameraValidationService cameraValidationService;
 
     @Override
     public Sensor registerSensor(Sensor sensor) {
-        //TODO validate sensor
         cameraRepository.insert((Camera) sensor);
         cameraSenderService.send(new CameraDTO((Camera) sensor, SensorOperation.REGISTERED));
         return sensor;
@@ -30,7 +30,7 @@ public class CameraService implements SensorService {
 
     @Override
     public Sensor unregisterSensor(String id) {
-        //TODO validate isSensorExists
+        cameraValidationService.validateCameraSensorExists(id);
         Camera camera = cameraRepository.findById(id).get();
         cameraRepository.save(
                 Camera.builder()
@@ -46,7 +46,7 @@ public class CameraService implements SensorService {
 
     @Override
     public Sensor updateSensor(String id, Sensor sensor) {
-        //TODO validate sensor
+        cameraValidationService.validateCameraSensorExists(id);
         Camera updatedCamera = cameraRepository.insert((Camera) sensor);
         cameraSenderService.send(new CameraDTO(updatedCamera, SensorOperation.UPDATED));
         return updatedCamera;

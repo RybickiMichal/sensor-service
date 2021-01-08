@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class CameraController {
     private CameraService cameraService;
 
     @PostMapping(value = "/camera/register")
-    public Sensor registerCameraSensor(@RequestBody Camera camera) {
+    public Sensor registerCameraSensor(@Valid @RequestBody Camera camera) {
         return cameraService.registerSensor(camera);
     }
 
@@ -31,7 +32,7 @@ public class CameraController {
     }
 
     @PutMapping(value = "/camera/update/{id}")
-    public Sensor updateCameraSensor(@PathVariable String id, @RequestBody Camera camera) {
+    public Sensor updateCameraSensor(@PathVariable String id, @Valid @RequestBody Camera camera) {
         return cameraService.updateSensor(id, camera);
     }
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class RFSensorController {
     private RFSensorService rfSensorService;
 
     @PostMapping(value = "/rf-sensor/register")
-    public Sensor registerRFSensor(@RequestBody RFSensor rfSensor) {
+    public Sensor registerRFSensor(@Valid @RequestBody RFSensor rfSensor) {
         return rfSensorService.registerSensor(rfSensor);
     }
 
@@ -31,7 +32,7 @@ public class RFSensorController {
     }
 
     @PutMapping(value = "/rf-sensor/update/{id}")
-    public Sensor updateRFSensor(@PathVariable String id, @RequestBody RFSensor rfSensor) {
+    public Sensor updateRFSensor(@PathVariable String id, @Valid @RequestBody RFSensor rfSensor) {
         return rfSensorService.updateSensor(id, rfSensor);
     }
 

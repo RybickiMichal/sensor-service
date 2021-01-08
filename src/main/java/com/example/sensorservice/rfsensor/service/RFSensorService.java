@@ -18,10 +18,10 @@ public class RFSensorService implements SensorService {
 
     private RFSensorRepository rfSensorRepository;
     private RFSensorSenderService rfSensorSenderService;
+    private RFSensorValidationService rfSensorValidationService;
 
     @Override
     public Sensor registerSensor(Sensor sensor) {
-        //TODO validate sensor
         rfSensorRepository.insert((RFSensor) sensor);
         rfSensorSenderService.send(new RFSensorDTO((RFSensor) sensor, SensorOperation.REGISTERED));
         return sensor;
@@ -29,7 +29,7 @@ public class RFSensorService implements SensorService {
 
     @Override
     public Sensor unregisterSensor(String id) {
-        //TODO validate isSensorExists
+        rfSensorValidationService.validateRFSensorExists(id);
         RFSensor rfSensor = rfSensorRepository.findById(id).get();
         rfSensorRepository.save(
                 RFSensor.builder()
@@ -45,7 +45,7 @@ public class RFSensorService implements SensorService {
 
     @Override
     public Sensor updateSensor(String id, Sensor sensor) {
-        //TODO validate sensor
+        rfSensorValidationService.validateRFSensorExists(id);
         RFSensor rfSensor = rfSensorRepository.save((RFSensor) sensor);
         rfSensorSenderService.send(new RFSensorDTO(rfSensor, SensorOperation.UPDATED));
         return rfSensor;
