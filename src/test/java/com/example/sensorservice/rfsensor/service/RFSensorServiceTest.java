@@ -28,6 +28,12 @@ class RFSensorServiceTest {
     @Mock
     private RFSensorRepository rfSensorRepository;
 
+    @Mock
+    private RFSensorSenderService rfSensorSenderService;
+
+    @Mock
+    private RFSensorValidationService rfSensorValidationService;
+
     @InjectMocks
     private RFSensorService rfSensorService;
 

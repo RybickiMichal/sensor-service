@@ -47,7 +47,7 @@ public class CameraService implements SensorService {
     @Override
     public Sensor updateSensor(String id, Sensor sensor) {
         cameraValidationService.validateIsCameraSensorExists(id);
-        Camera updatedCamera = cameraRepository.insert((Camera) sensor);
+        Camera updatedCamera = cameraRepository.save((Camera) sensor);
         cameraSenderService.send(new CameraDTO(updatedCamera, SensorOperation.UPDATED));
         return updatedCamera;
     }
