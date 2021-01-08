@@ -1,11 +1,12 @@
 package com.example.sensorservice.camerasensor.service;
 
+import com.example.sensorservice.camerasensor.repository.CameraRepository;
 import com.example.sensorservice.common.model.Camera;
 import com.example.sensorservice.common.model.CameraDTO;
 import com.example.sensorservice.common.model.Sensor;
 import com.example.sensorservice.common.model.SensorOperation;
+import com.example.sensorservice.common.model.SensorStatus;
 import com.example.sensorservice.common.service.SensorService;
-import com.example.sensorservice.camerasensor.repository.CameraRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,14 @@ public class CameraService implements SensorService {
     public Sensor unregisterSensor(String id) {
         //TODO validate isSensorExists
         Camera camera = cameraRepository.findById(id).get();
-        cameraRepository.deleteById(id);
+        cameraRepository.save(
+                Camera.builder()
+                        .sensorStatus(SensorStatus.INACTIVE)
+                        .id(camera.getId())
+                        .ip(camera.getIp())
+                        .streamAddress(camera.getStreamAddress())
+                        .panTiltZoom(camera.getPanTiltZoom())
+                        .build());
         cameraSenderService.send(new CameraDTO(camera, SensorOperation.UNREGISTERED));
         return camera;
     }

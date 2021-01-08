@@ -4,8 +4,9 @@ import com.example.sensorservice.common.model.RFSensor;
 import com.example.sensorservice.common.model.RFSensorDTO;
 import com.example.sensorservice.common.model.Sensor;
 import com.example.sensorservice.common.model.SensorOperation;
-import com.example.sensorservice.rfsensor.repository.RFSensorRepository;
+import com.example.sensorservice.common.model.SensorStatus;
 import com.example.sensorservice.common.service.SensorService;
+import com.example.sensorservice.rfsensor.repository.RFSensorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,14 @@ public class RFSensorService implements SensorService {
     public Sensor unregisterSensor(String id) {
         //TODO validate isSensorExists
         RFSensor rfSensor = rfSensorRepository.findById(id).get();
-        rfSensorRepository.deleteById(id);
+        rfSensorRepository.save(
+                RFSensor.builder()
+                        .sensorStatus(SensorStatus.INACTIVE)
+                        .id(rfSensor.getId())
+                        .ip(rfSensor.getIp())
+                        .maxFrequency(rfSensor.getMaxFrequency())
+                        .minFrequency(rfSensor.getMinFrequency())
+                        .build());
         rfSensorSenderService.send(new RFSensorDTO(rfSensor, SensorOperation.UNREGISTERED));
         return rfSensor;
     }
@@ -38,7 +46,7 @@ public class RFSensorService implements SensorService {
     @Override
     public Sensor updateSensor(String id, Sensor sensor) {
         //TODO validate sensor
-        RFSensor rfSensor = rfSensorRepository.insert((RFSensor) sensor);
+        RFSensor rfSensor = rfSensorRepository.save((RFSensor) sensor);
         rfSensorSenderService.send(new RFSensorDTO(rfSensor, SensorOperation.UPDATED));
         return rfSensor;
     }

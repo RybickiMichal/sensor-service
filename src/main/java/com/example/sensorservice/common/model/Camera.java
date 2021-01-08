@@ -13,8 +13,8 @@ public class Camera extends Sensor {
     private PanTiltZoom panTiltZoom;
 
     @Builder
-    public Camera(String ip, SensorStatus sensorStatus, String streamAddress, PanTiltZoom panTiltZoom) {
-        super(ip, sensorStatus);
+    public Camera(String id, String ip, SensorStatus sensorStatus, String streamAddress, PanTiltZoom panTiltZoom) {
+        super(id, sensorStatus, ip);
         this.streamAddress = streamAddress;
         this.panTiltZoom = panTiltZoom;
     }

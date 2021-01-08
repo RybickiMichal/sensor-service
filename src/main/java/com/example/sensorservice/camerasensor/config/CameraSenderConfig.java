@@ -19,7 +19,7 @@ import java.util.Map;
 @Configuration
 public class CameraSenderConfig {
 
-    @Value("${spring.kafka.bootstrap-servers}")
+    @Value("${kafka.bootstrap-servers}")
     private String bootstrapServer;
 
     @Bean
