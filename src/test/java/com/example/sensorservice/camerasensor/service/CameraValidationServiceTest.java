@@ -14,9 +14,6 @@ import java.util.Optional;
 import static com.example.sensorservice.camerasensor.sampledata.CameraSampleData.correctActiveCamera;
 import static com.example.sensorservice.camerasensor.sampledata.CameraSampleData.correctInactiveCamera;
 import static com.example.sensorservice.rfsensor.sampledata.RFSensorSampleData.correctActiveRFSensor;
-import static com.example.sensorservice.rfsensor.sampledata.RFSensorSampleData.correctInactiveRFSensor;
-import static java.lang.Boolean.FALSE;
-import static java.lang.Boolean.TRUE;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,38 +29,58 @@ class CameraValidationServiceTest {
     private CameraValidationService cameraValidationService;
 
     @Test
-    void shouldThrowInvalidSensorExceptionWhenThereIsNoSensorWithGivenId() {
-        when(cameraRepository.existsById(any())).thenReturn(FALSE);
-
-        assertThatThrownBy(() -> cameraValidationService.validateIsCameraSensorExistsAndSensorStatusIsActive(any()))
+    void shouldThrowInvalidSensorExceptionWhenUnregisteringAndThereIsNoSensorWithGivenId() {
+        assertThatThrownBy(() -> cameraValidationService.validateUnregisterSensor(any()))
                 .isInstanceOf(InvalidSensorException.class)
-                .hasMessage("Camera Sensor with given id does't exist");
+                .hasMessage("Camera with given id doesn't exist");
     }
 
     @Test
-    void shouldThrowInvalidSensorExceptionWhenOldSensorStatusIsInactive() {
-        when(cameraRepository.existsById(any())).thenReturn(TRUE);
+    void shouldThrowInvalidSensorExceptionWhenUpdatingAndThereIsNoSensorWithGivenId() {
+        assertThatThrownBy(() -> cameraValidationService.validateUpdateSensor(any(), null))
+                .isInstanceOf(InvalidSensorException.class)
+                .hasMessage("Camera with given id doesn't exist");
+    }
+
+    @Test
+    void shouldThrowInvalidSensorExceptionWhenUnregisteringAndSensorStatusIsInactive() {
         when(cameraRepository.findById(any())).thenReturn(Optional.of(correctInactiveCamera()));
 
-        assertThatThrownBy(() -> cameraValidationService.validateIsCameraSensorExistsAndSensorStatusIsActive(any()))
+        assertThatThrownBy(() -> cameraValidationService.validateUnregisterSensor(any()))
                 .isInstanceOf(InvalidSensorException.class)
-                .hasMessage("Cannot update/delete inactive sensor");
+                .hasMessage("Cannot delete inactive sensor");
     }
 
     @Test
-    void shouldThrowInvalidSensorExceptionWhenNewSensorStatusIsInactive() {
-        assertThatThrownBy(() -> cameraValidationService.validateCameraSensorStatus(correctInactiveRFSensor()))
+    void shouldThrowInvalidSensorExceptionWhenUpdatingAndOldSensorStatusIsInactive() {
+        when(cameraRepository.findById(any())).thenReturn(Optional.of(correctInactiveCamera()));
+
+        assertThatThrownBy(() -> cameraValidationService.validateUpdateSensor(any(), null))
+                .isInstanceOf(InvalidSensorException.class)
+                .hasMessage("Cannot update inactive sensor");
+    }
+
+    @Test
+    void shouldThrowInvalidSensorExceptionWhenUpdatingAndNewSensorStatusIsInactive() {
+        when(cameraRepository.findById(any())).thenReturn(Optional.of(correctActiveCamera()));
+
+        assertThatThrownBy(() -> cameraValidationService.validateUpdateSensor(any(), correctInactiveCamera()))
                 .isInstanceOf(InvalidSensorException.class)
                 .hasMessage("If you want unregister sensor then try delete endpoint");
     }
 
     @Test
-    void shouldPassValidation() {
-        when(cameraRepository.existsById(any())).thenReturn(TRUE);
+    void shouldPassUnregisteringValidation() {
         when(cameraRepository.findById(any())).thenReturn(Optional.of(correctActiveCamera()));
 
-        assertDoesNotThrow(() -> cameraValidationService.validateIsCameraSensorExistsAndSensorStatusIsActive(any()));
-        assertDoesNotThrow(() -> cameraValidationService.validateCameraSensorStatus(correctActiveRFSensor()));
+        assertDoesNotThrow(() -> cameraValidationService.validateUnregisterSensor(any()));
+    }
+
+    @Test
+    void shouldPassUpdatingValidation() {
+        when(cameraRepository.findById(any())).thenReturn(Optional.of(correctActiveCamera()));
+
+        assertDoesNotThrow(() -> cameraValidationService.validateUpdateSensor(any(), correctActiveRFSensor()));
     }
 
 }

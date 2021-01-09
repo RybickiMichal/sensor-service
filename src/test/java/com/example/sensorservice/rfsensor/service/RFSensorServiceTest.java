@@ -1,6 +1,5 @@
 package com.example.sensorservice.rfsensor.service;
 
-import com.example.sensorservice.common.exception.InvalidSensorException;
 import com.example.sensorservice.common.model.RFSensor;
 import com.example.sensorservice.common.model.Sensor;
 import com.example.sensorservice.common.model.SensorStatus;
@@ -18,7 +17,6 @@ import static com.example.sensorservice.rfsensor.sampledata.RFSensorSampleData.c
 import static com.example.sensorservice.rfsensor.sampledata.RFSensorSampleData.correctInactiveRFSensor;
 import static com.example.sensorservice.rfsensor.sampledata.RFSensorSampleData.rfSensors;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -53,15 +51,6 @@ class RFSensorServiceTest {
         assertThat(inactiveRFSensor)
                 .usingRecursiveComparison()
                 .isEqualTo(correctInactiveRFSensor());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenUnregisteringAndThereIsNoGivenSensor() {
-        when(rfSensorRepository.findById(any())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> rfSensorService.unregisterSensor(correctActiveRFSensor().getId()))
-                .isInstanceOf(InvalidSensorException.class)
-                .hasMessage("RF Sensor with given id does't exist");
     }
 
     @Test

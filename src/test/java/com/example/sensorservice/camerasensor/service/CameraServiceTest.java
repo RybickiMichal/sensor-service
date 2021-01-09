@@ -1,7 +1,6 @@
 package com.example.sensorservice.camerasensor.service;
 
 import com.example.sensorservice.camerasensor.repository.CameraRepository;
-import com.example.sensorservice.common.exception.InvalidSensorException;
 import com.example.sensorservice.common.model.Camera;
 import com.example.sensorservice.common.model.Sensor;
 import com.example.sensorservice.common.model.SensorStatus;
@@ -18,7 +17,6 @@ import static com.example.sensorservice.camerasensor.sampledata.CameraSampleData
 import static com.example.sensorservice.camerasensor.sampledata.CameraSampleData.correctActiveCamera;
 import static com.example.sensorservice.camerasensor.sampledata.CameraSampleData.correctInactiveCamera;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -53,15 +51,6 @@ class CameraServiceTest {
         assertThat(inactiveCamera)
                 .usingRecursiveComparison()
                 .isEqualTo(correctInactiveCamera());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenUnregisteringAndThereIsNoGivenSensor() {
-        when(cameraRepository.findById(any())).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> cameraService.unregisterSensor(correctActiveCamera().getId()))
-                .isInstanceOf(InvalidSensorException.class)
-                .hasMessage("Camera Sensor with given id does't exist");
     }
 
     @Test

@@ -1,6 +1,5 @@
 package com.example.sensorservice.rfsensor.service;
 
-import com.example.sensorservice.common.exception.InvalidSensorException;
 import com.example.sensorservice.common.model.RFSensor;
 import com.example.sensorservice.common.model.RFSensorDTO;
 import com.example.sensorservice.common.model.Sensor;
@@ -30,8 +29,8 @@ public class RFSensorService implements SensorService {
 
     @Override
     public Sensor unregisterSensor(String id) {
-        RFSensor rfSensor = rfSensorRepository.findById(id).orElseThrow(() -> new InvalidSensorException("RF Sensor with given id does't exist"));
-        rfSensorValidationService.validateIsRFSensorExistsAndSensorStatusIsActive(id);
+        rfSensorValidationService.validateUnregisterSensor(id);
+        RFSensor rfSensor = rfSensorRepository.findById(id).get();
         RFSensor inactiveRFSensor = RFSensor.builder()
                 .sensorStatus(SensorStatus.INACTIVE)
                 .id(rfSensor.getId())
@@ -40,17 +39,16 @@ public class RFSensorService implements SensorService {
                 .minFrequency(rfSensor.getMinFrequency())
                 .build();
         rfSensorRepository.save(inactiveRFSensor);
-        rfSensorSenderService.send(new RFSensorDTO(rfSensor, SensorOperation.UNREGISTERED));
+        rfSensorSenderService.send(new RFSensorDTO(inactiveRFSensor, SensorOperation.UNREGISTERED));
         return inactiveRFSensor;
     }
 
     @Override
-    public Sensor updateSensor(String id, Sensor sensor) {
-        rfSensorValidationService.validateIsRFSensorExistsAndSensorStatusIsActive(id);
-        rfSensorValidationService.validateRFSensorStatus(sensor);
-        RFSensor rfSensor = rfSensorRepository.save((RFSensor) sensor);
-        rfSensorSenderService.send(new RFSensorDTO(rfSensor, SensorOperation.UPDATED));
-        return rfSensor;
+    public Sensor updateSensor(String id, Sensor newSensor) {
+        rfSensorValidationService.validateUpdateSensor(id, newSensor);
+        rfSensorRepository.save((RFSensor) newSensor);
+        rfSensorSenderService.send(new RFSensorDTO((RFSensor) newSensor, SensorOperation.UPDATED));
+        return newSensor;
     }
 
     public List<RFSensor> getRFSensors() {
