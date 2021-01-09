@@ -64,7 +64,7 @@ class RFSensorServiceTest {
     @Test
     void shouldGetListWithRFSensors() {
         when(rfSensorRepository.findAll()).thenReturn(RFSensorSampleData.rfSensors());
-        List<RFSensor> rfSensors = rfSensorService.getRFSensors();
+        List<RFSensor> rfSensors = rfSensorService.getActiveRFSensors();
 
         assertThat(rfSensors)
                 .usingRecursiveComparison()

@@ -36,9 +36,9 @@ public class RFSensorController {
         return rfSensorService.updateSensor(id, rfSensor);
     }
 
-    @GetMapping(value = "/rf-sensors")
-    public List<RFSensor> getRFSensors() {
-        return rfSensorService.getRFSensors();
+    @GetMapping(value = "/rf-sensors/active")
+    public List<RFSensor> getActiveRFSensors() {
+        return rfSensorService.getActiveRFSensors();
     }
 
 }

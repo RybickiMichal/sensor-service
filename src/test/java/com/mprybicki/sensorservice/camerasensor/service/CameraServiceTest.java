@@ -64,7 +64,7 @@ class CameraServiceTest {
     @Test
     void shouldGetListWithCameraSensors() {
         when(cameraRepository.findAll()).thenReturn(CameraSampleData.cameraSensors());
-        List<Camera> cameraSensors = cameraService.getCameraSensors();
+        List<Camera> cameraSensors = cameraService.getActiveCameraSensors();
 
         assertThat(cameraSensors)
                 .usingRecursiveComparison()
