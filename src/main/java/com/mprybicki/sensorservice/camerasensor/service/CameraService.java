@@ -6,6 +6,7 @@ import com.mprybicki.sensorservice.common.model.CameraDTO;
 import com.mprybicki.sensorservice.common.model.Sensor;
 import com.mprybicki.sensorservice.common.service.SensorService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import static com.mprybicki.sensorservice.common.model.SensorStatus.INACTIVE;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class CameraService implements SensorService {
 
     private CameraRepository cameraRepository;
@@ -30,6 +32,7 @@ public class CameraService implements SensorService {
         cameraValidationService.validateRegisterSensor(sensor);
         cameraRepository.insert((Camera) sensor);
         cameraSenderService.send(new CameraDTO((Camera) sensor, REGISTERED));
+        log.info("new camera sensor is registered " + sensor);
         return sensor;
     }
 
@@ -46,6 +49,7 @@ public class CameraService implements SensorService {
                 .build();
         cameraRepository.save(inactiveCamera);
         cameraSenderService.send(new CameraDTO(inactiveCamera, UNREGISTERED));
+        log.info("camera sensor is successfully unregistered " + inactiveCamera);
         return inactiveCamera;
     }
 
@@ -54,6 +58,7 @@ public class CameraService implements SensorService {
         cameraValidationService.validateUpdateSensor(id, newSensor);
         cameraRepository.save((Camera) newSensor);
         cameraSenderService.send(new CameraDTO((Camera) newSensor, UPDATED));
+        log.info("camera sensor is successfully updated " + newSensor);
         return newSensor;
     }
 

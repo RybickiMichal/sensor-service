@@ -6,6 +6,7 @@ import com.mprybicki.sensorservice.common.model.Sensor;
 import com.mprybicki.sensorservice.common.service.SensorService;
 import com.mprybicki.sensorservice.rfsensor.repository.RFSensorRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import static com.mprybicki.sensorservice.common.model.SensorStatus.INACTIVE;
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class RFSensorService implements SensorService {
 
     private RFSensorRepository rfSensorRepository;
@@ -29,6 +31,7 @@ public class RFSensorService implements SensorService {
         rfSensorValidationService.validateRegisterSensor(sensor);
         rfSensorRepository.insert((RFSensor) sensor);
         rfSensorSenderService.send(new RFSensorDTO((RFSensor) sensor, REGISTERED));
+        log.info("new rf sensor is registered " + sensor);
         return sensor;
     }
 
@@ -45,6 +48,7 @@ public class RFSensorService implements SensorService {
                 .build();
         rfSensorRepository.save(inactiveRFSensor);
         rfSensorSenderService.send(new RFSensorDTO(inactiveRFSensor, UNREGISTERED));
+        log.info("rf sensor is successfully unregistered " + inactiveRFSensor);
         return inactiveRFSensor;
     }
 
@@ -53,6 +57,7 @@ public class RFSensorService implements SensorService {
         rfSensorValidationService.validateUpdateSensor(id, newSensor);
         rfSensorRepository.save((RFSensor) newSensor);
         rfSensorSenderService.send(new RFSensorDTO((RFSensor) newSensor, UPDATED));
+        log.info("rf sensor is successfully updated " + newSensor);
         return newSensor;
     }
 

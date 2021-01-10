@@ -12,5 +12,5 @@ public interface RFSensorRepository extends MongoRepository<RFSensor, String> {
 
     List<RFSensor> findBySensorStatus(SensorStatus sensorStatus);
 
-    boolean existsSensorById(String model);
+    boolean existsSensorByIp(String model);
 }

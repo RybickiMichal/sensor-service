@@ -42,7 +42,7 @@ public class RFSensorValidationService {
         if (oldSensor != null && oldSensor.getIp().equals(newSensor.getIp())) {
             return;
         }
-        if (rfSensorRepository.existsSensorById(newSensor.getId())) {
+        if (rfSensorRepository.existsSensorByIp(newSensor.getIp())) {
             throw new InvalidSensorException(errorMessage);
         }
     }

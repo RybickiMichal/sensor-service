@@ -74,7 +74,7 @@ class CameraValidationServiceTest {
     @Test
     void shouldThrowInvalidSensorExceptionWhenUpdatingAndNewSensorIpIsNotDistinct() {
         when(cameraRepository.findById(any())).thenReturn(Optional.of(correctActiveCamera()));
-        when(cameraRepository.existsSensorById(any())).thenReturn(TRUE);
+        when(cameraRepository.existsSensorByIp(any())).thenReturn(TRUE);
 
         assertThatThrownBy(() -> cameraValidationService.validateUpdateSensor(any(), correctActiveCamera2()))
                 .isInstanceOf(InvalidSensorException.class)
@@ -83,7 +83,7 @@ class CameraValidationServiceTest {
 
     @Test
     void shouldThrowInvalidSensorExceptionWhenRegisteringAndNewSensorIpIsNotDistinct() {
-        when(cameraRepository.existsSensorById(any())).thenReturn(TRUE);
+        when(cameraRepository.existsSensorByIp(any())).thenReturn(TRUE);
 
         assertThatThrownBy(() -> cameraValidationService.validateRegisterSensor(correctActiveCamera()))
                 .isInstanceOf(InvalidSensorException.class)

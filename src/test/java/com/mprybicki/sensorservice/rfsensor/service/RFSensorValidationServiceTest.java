@@ -73,7 +73,7 @@ class RFSensorValidationServiceTest {
     @Test
     void shouldThrowInvalidSensorExceptionWhenUpdatingAndNewSensorIpIsNotDistinct() {
         when(rfSensorRepository.findById(any())).thenReturn(Optional.of(correctActiveRFSensor()));
-        when(rfSensorRepository.existsSensorById(any())).thenReturn(TRUE);
+        when(rfSensorRepository.existsSensorByIp(any())).thenReturn(TRUE);
 
         assertThatThrownBy(() -> rfSensorValidationService.validateUpdateSensor(any(), correctActiveRFSensor2()))
                 .isInstanceOf(InvalidSensorException.class)
@@ -82,7 +82,7 @@ class RFSensorValidationServiceTest {
 
     @Test
     void shouldThrowInvalidSensorExceptionWhenRegisteringAndNewSensorIpIsNotDistinct() {
-        when(rfSensorRepository.existsSensorById(any())).thenReturn(TRUE);
+        when(rfSensorRepository.existsSensorByIp(any())).thenReturn(TRUE);
 
         assertThatThrownBy(() -> rfSensorValidationService.validateRegisterSensor(correctActiveRFSensor()))
                 .isInstanceOf(InvalidSensorException.class)

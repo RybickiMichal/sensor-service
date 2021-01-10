@@ -12,5 +12,5 @@ public interface CameraRepository extends MongoRepository<Camera, String> {
 
     List<Camera> findBySensorStatus(SensorStatus sensorStatus);
 
-    boolean existsSensorById(String model);
+    boolean existsSensorByIp(String model);
 }
