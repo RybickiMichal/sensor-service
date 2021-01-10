@@ -1,6 +1,7 @@
 package com.mprybicki.sensorservice.camerasensor.repository;
 
-import com.mprybicki.sensorservice.common.model.*;
+import com.mprybicki.sensorservice.common.model.Camera;
+import com.mprybicki.sensorservice.common.model.SensorStatus;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,5 +14,5 @@ public interface CameraRepository extends MongoRepository<Camera, String> {
 
     boolean existsSensorByIp(String model);
 
-    List<RFSensor> findByIp(String ip);
+    List<Camera> findByIp(String ip);
 }
