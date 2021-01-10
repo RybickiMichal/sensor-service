@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.mprybicki.sensorservice.rfsensor.sampledata.RFSensorSampleData.correctActiveRFSensor;
+import static com.mprybicki.sensorservice.rfsensor.sampledata.RFSensorSampleData.rfSensors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -35,7 +37,7 @@ class RFSensorServiceTest {
 
     @Test
     void shouldRegisterRFSensor() {
-        Sensor activeRFSensor = rfSensorService.registerSensor(RFSensorSampleData.correctActiveRFSensor());
+        Sensor activeRFSensor = rfSensorService.registerSensor(correctActiveRFSensor());
 
         assertThat(activeRFSensor.getSensorStatus())
                 .isEqualTo(SensorStatus.ACTIVE);
@@ -43,8 +45,8 @@ class RFSensorServiceTest {
 
     @Test
     void shouldUnregisterRFSensor() {
-        when(rfSensorRepository.findById(any())).thenReturn(Optional.of(RFSensorSampleData.correctActiveRFSensor()));
-        Sensor inactiveRFSensor = rfSensorService.unregisterSensor(RFSensorSampleData.correctActiveRFSensor().getId());
+        when(rfSensorRepository.findById(any())).thenReturn(Optional.of(correctActiveRFSensor()));
+        Sensor inactiveRFSensor = rfSensorService.unregisterSensor(correctActiveRFSensor().getId());
 
         assertThat(inactiveRFSensor)
                 .usingRecursiveComparison()
@@ -53,22 +55,22 @@ class RFSensorServiceTest {
 
     @Test
     void shouldUpdateRFSensor() {
-        when(rfSensorRepository.save(any())).thenReturn(RFSensorSampleData.correctActiveRFSensor());
-        Sensor newRFSensor = rfSensorService.updateSensor("5ff8832b9d260a2bebb6a82d", RFSensorSampleData.correctActiveRFSensor());
+        when(rfSensorRepository.save(any())).thenReturn(correctActiveRFSensor());
+        Sensor newRFSensor = rfSensorService.updateSensor("5ff8832b9d260a2bebb6a82d", correctActiveRFSensor());
 
         assertThat(newRFSensor)
                 .usingRecursiveComparison()
-                .isEqualTo(RFSensorSampleData.correctActiveRFSensor());
+                .isEqualTo(correctActiveRFSensor());
     }
 
     @Test
     void shouldGetListWithRFSensors() {
-        when(rfSensorRepository.findAll()).thenReturn(RFSensorSampleData.rfSensors());
+        when(rfSensorRepository.findBySensorStatus(any())).thenReturn(rfSensors());
         List<RFSensor> rfSensors = rfSensorService.getActiveRFSensors();
 
         assertThat(rfSensors)
                 .usingRecursiveComparison()
-                .isEqualTo(RFSensorSampleData.rfSensors());
+                .isEqualTo(rfSensors());
     }
 
 }

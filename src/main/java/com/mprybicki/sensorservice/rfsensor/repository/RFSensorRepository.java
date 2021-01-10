@@ -11,4 +11,6 @@ import java.util.List;
 public interface RFSensorRepository extends MongoRepository<RFSensor, String> {
 
     List<RFSensor> findBySensorStatus(SensorStatus sensorStatus);
+
+    boolean existsSensorById(String model);
 }

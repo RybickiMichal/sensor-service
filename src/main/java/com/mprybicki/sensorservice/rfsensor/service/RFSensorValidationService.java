@@ -15,20 +15,34 @@ public class RFSensorValidationService {
 
     private RFSensorRepository rfSensorRepository;
 
+    public void validateRegisterSensor(Sensor sensorToRegister) {
+        validateIsSensorIpDistinct(null, sensorToRegister, "Sensor with given IP is already registered, try to unregister it");
+    }
+
     public void validateUnregisterSensor(String id) {
-        RFSensor sensorToDelete = rfSensorRepository.findById(id).orElseThrow(() -> new InvalidSensorException("RF Sensor with given id doesn't exist"));
-        validateIsSensorActive(sensorToDelete, "Cannot delete inactive sensor");
+        RFSensor sensorToUnregister = rfSensorRepository.findById(id).orElseThrow(() -> new InvalidSensorException("RF Sensor with given id doesn't exist"));
+        validateIsSensorActive(sensorToUnregister, "Cannot delete inactive sensor");
     }
 
     public void validateUpdateSensor(String oldSensorId, Sensor newSenor) {
         RFSensor oldSensor = rfSensorRepository.findById(oldSensorId).orElseThrow(() -> new InvalidSensorException("RF Sensor with given id doesn't exist"));
         validateIsSensorActive(oldSensor, "Cannot update inactive sensor");
 
-        validateIsSensorActive(newSenor, "If you want unregister sensor then try delete endpoint");
+        validateIsSensorActive(newSenor, "To unregister sensor try delete endpoint");
+        validateIsSensorIpDistinct(oldSensor, newSenor, "Sensor with given IP is already registered, try to unregister it");
     }
 
     private void validateIsSensorActive(Sensor sensor, String errorMessage) {
         if (sensor.getSensorStatus().equals(INACTIVE)) {
+            throw new InvalidSensorException(errorMessage);
+        }
+    }
+
+    private void validateIsSensorIpDistinct(Sensor oldSensor, Sensor newSensor, String errorMessage) {
+        if (oldSensor != null && oldSensor.getIp().equals(newSensor.getIp())) {
+            return;
+        }
+        if (rfSensorRepository.existsSensorById(newSensor.getId())) {
             throw new InvalidSensorException(errorMessage);
         }
     }

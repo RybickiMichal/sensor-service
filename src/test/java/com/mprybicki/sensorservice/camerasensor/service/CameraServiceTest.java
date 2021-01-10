@@ -1,10 +1,10 @@
 package com.mprybicki.sensorservice.camerasensor.service;
 
 import com.mprybicki.sensorservice.camerasensor.repository.CameraRepository;
+import com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData;
 import com.mprybicki.sensorservice.common.model.Camera;
 import com.mprybicki.sensorservice.common.model.Sensor;
 import com.mprybicki.sensorservice.common.model.SensorStatus;
-import com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData.cameraSensors;
+import static com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData.correctActiveCamera;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -35,7 +37,7 @@ class CameraServiceTest {
 
     @Test
     void shouldRegisterCamera() {
-        Sensor activeCameraSensor = cameraService.registerSensor(CameraSampleData.correctActiveCamera());
+        Sensor activeCameraSensor = cameraService.registerSensor(correctActiveCamera());
 
         assertThat(activeCameraSensor.getSensorStatus())
                 .isEqualTo(SensorStatus.ACTIVE);
@@ -43,8 +45,8 @@ class CameraServiceTest {
 
     @Test
     void shouldUnregisterCamera() {
-        when(cameraRepository.findById(any())).thenReturn(Optional.of(CameraSampleData.correctActiveCamera()));
-        Sensor inactiveCamera = cameraService.unregisterSensor(CameraSampleData.correctActiveCamera().getId());
+        when(cameraRepository.findById(any())).thenReturn(Optional.of(correctActiveCamera()));
+        Sensor inactiveCamera = cameraService.unregisterSensor(correctActiveCamera().getId());
 
         assertThat(inactiveCamera)
                 .usingRecursiveComparison()
@@ -53,22 +55,21 @@ class CameraServiceTest {
 
     @Test
     void shouldUpdateCamera() {
-        when(cameraRepository.save(any())).thenReturn(CameraSampleData.correctActiveCamera());
-        Sensor newCamera = cameraService.updateSensor("5ff8832b9d260a2bebb6a82d", CameraSampleData.correctActiveCamera());
+        when(cameraRepository.save(any())).thenReturn(correctActiveCamera());
+        Sensor newCamera = cameraService.updateSensor("5ff8832b9d260a2bebb6a82d", correctActiveCamera());
 
         assertThat(newCamera)
                 .usingRecursiveComparison()
-                .isEqualTo(CameraSampleData.correctActiveCamera());
+                .isEqualTo(correctActiveCamera());
     }
 
     @Test
     void shouldGetListWithCameraSensors() {
-        when(cameraRepository.findAll()).thenReturn(CameraSampleData.cameraSensors());
+        when(cameraRepository.findBySensorStatus(any())).thenReturn(cameraSensors());
         List<Camera> cameraSensors = cameraService.getActiveCameraSensors();
 
         assertThat(cameraSensors)
                 .usingRecursiveComparison()
-                .isEqualTo(CameraSampleData.cameraSensors());
+                .isEqualTo(cameraSensors());
     }
-
 }

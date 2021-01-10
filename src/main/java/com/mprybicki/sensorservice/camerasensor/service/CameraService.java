@@ -27,6 +27,7 @@ public class CameraService implements SensorService {
 
     @Override
     public Sensor registerSensor(Sensor sensor) {
+        cameraValidationService.validateRegisterSensor(sensor);
         cameraRepository.insert((Camera) sensor);
         cameraSenderService.send(new CameraDTO((Camera) sensor, REGISTERED));
         return sensor;

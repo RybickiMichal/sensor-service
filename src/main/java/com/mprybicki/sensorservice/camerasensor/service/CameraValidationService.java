@@ -15,20 +15,34 @@ public class CameraValidationService {
 
     private CameraRepository cameraRepository;
 
+    public void validateRegisterSensor(Sensor sensorToRegister) {
+        validateIsSensorIpDistinct(null, sensorToRegister, "Sensor with given IP is already registered, try to unregister it");
+    }
+
     public void validateUnregisterSensor(String id) {
-        Camera sensorToDelete = cameraRepository.findById(id).orElseThrow(() -> new InvalidSensorException("Camera with given id doesn't exist"));
-        validateIsSensorActive(sensorToDelete, "Cannot delete inactive sensor");
+        Camera sensorToUnregister = cameraRepository.findById(id).orElseThrow(() -> new InvalidSensorException("Camera with given id doesn't exist"));
+        validateIsSensorActive(sensorToUnregister, "Cannot delete inactive sensor");
     }
 
     public void validateUpdateSensor(String oldSensorId, Sensor newSenor) {
         Camera oldSensor = cameraRepository.findById(oldSensorId).orElseThrow(() -> new InvalidSensorException("Camera with given id doesn't exist"));
         validateIsSensorActive(oldSensor, "Cannot update inactive sensor");
 
-        validateIsSensorActive(newSenor, "If you want unregister sensor then try delete endpoint");
+        validateIsSensorActive(newSenor, "To unregister sensor try delete endpoint");
+        validateIsSensorIpDistinct(oldSensor, newSenor, "Sensor with given IP is already registered, try to unregister it");
     }
 
     private void validateIsSensorActive(Sensor sensor, String errorMessage) {
         if (sensor.getSensorStatus().equals(INACTIVE)) {
+            throw new InvalidSensorException(errorMessage);
+        }
+    }
+
+    private void validateIsSensorIpDistinct(Sensor oldSensor, Sensor newSensor, String errorMessage) {
+        if (oldSensor != null && oldSensor.getIp().equals(newSensor.getIp())) {
+            return;
+        }
+        if (cameraRepository.existsSensorById(newSensor.getId())) {
             throw new InvalidSensorException(errorMessage);
         }
     }

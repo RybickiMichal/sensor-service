@@ -26,6 +26,7 @@ public class RFSensorService implements SensorService {
 
     @Override
     public Sensor registerSensor(Sensor sensor) {
+        rfSensorValidationService.validateRegisterSensor(sensor);
         rfSensorRepository.insert((RFSensor) sensor);
         rfSensorSenderService.send(new RFSensorDTO((RFSensor) sensor, REGISTERED));
         return sensor;
