@@ -7,6 +7,7 @@ import com.mprybicki.sensorservice.common.model.Sensor;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.mprybicki.sensorservice.common.model.SensorStatus.ACTIVE;
 import static com.mprybicki.sensorservice.common.model.SensorStatus.INACTIVE;
 
 @AllArgsConstructor
@@ -42,7 +43,8 @@ public class CameraValidationService {
         if (oldSensor != null && oldSensor.getIp().equals(newSensor.getIp())) {
             return;
         }
-        if (cameraRepository.existsSensorByIp(newSensor.getIp())) {
+        if (cameraRepository.existsSensorByIp(newSensor.getIp())
+                && cameraRepository.findByIp(newSensor.getIp()).stream().anyMatch(rfSensor -> rfSensor.getSensorStatus().equals(ACTIVE))) {
             throw new InvalidSensorException(errorMessage);
         }
     }

@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
+import java.util.*;
 
 import static com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData.correctActiveCamera;
 import static com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData.correctActiveCamera2;
@@ -75,6 +75,7 @@ class CameraValidationServiceTest {
     void shouldThrowInvalidSensorExceptionWhenUpdatingAndNewSensorIpIsNotDistinct() {
         when(cameraRepository.findById(any())).thenReturn(Optional.of(correctActiveCamera()));
         when(cameraRepository.existsSensorByIp(any())).thenReturn(TRUE);
+        when(cameraRepository.findByIp(any())).thenReturn(List.of(correctActiveRFSensor()));
 
         assertThatThrownBy(() -> cameraValidationService.validateUpdateSensor(any(), correctActiveCamera2()))
                 .isInstanceOf(InvalidSensorException.class)
@@ -84,6 +85,7 @@ class CameraValidationServiceTest {
     @Test
     void shouldThrowInvalidSensorExceptionWhenRegisteringAndNewSensorIpIsNotDistinct() {
         when(cameraRepository.existsSensorByIp(any())).thenReturn(TRUE);
+        when(cameraRepository.findByIp(any())).thenReturn(List.of(correctActiveRFSensor()));
 
         assertThatThrownBy(() -> cameraValidationService.validateRegisterSensor(correctActiveCamera()))
                 .isInstanceOf(InvalidSensorException.class)

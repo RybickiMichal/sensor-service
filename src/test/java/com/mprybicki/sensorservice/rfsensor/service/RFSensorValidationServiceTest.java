@@ -1,24 +1,21 @@
 package com.mprybicki.sensorservice.rfsensor.service;
 
 
-import com.mprybicki.sensorservice.common.exception.InvalidSensorException;
-import com.mprybicki.sensorservice.rfsensor.repository.RFSensorRepository;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import com.mprybicki.sensorservice.common.exception.*;
+import com.mprybicki.sensorservice.rfsensor.repository.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.*;
+import org.mockito.*;
+import org.mockito.junit.jupiter.*;
 
-import java.util.Optional;
+import java.util.*;
 
-import static com.mprybicki.sensorservice.rfsensor.sampledata.RFSensorSampleData.correctActiveRFSensor;
-import static com.mprybicki.sensorservice.rfsensor.sampledata.RFSensorSampleData.correctActiveRFSensor2;
-import static com.mprybicki.sensorservice.rfsensor.sampledata.RFSensorSampleData.correctInactiveRFSensor;
-import static java.lang.Boolean.TRUE;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static com.mprybicki.sensorservice.rfsensor.sampledata.RFSensorSampleData.*;
+import static java.lang.Boolean.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RFSensorValidationServiceTest {
@@ -74,6 +71,7 @@ class RFSensorValidationServiceTest {
     void shouldThrowInvalidSensorExceptionWhenUpdatingAndNewSensorIpIsNotDistinct() {
         when(rfSensorRepository.findById(any())).thenReturn(Optional.of(correctActiveRFSensor()));
         when(rfSensorRepository.existsSensorByIp(any())).thenReturn(TRUE);
+        when(rfSensorRepository.findByIp(any())).thenReturn(List.of(correctActiveRFSensor()));
 
         assertThatThrownBy(() -> rfSensorValidationService.validateUpdateSensor(any(), correctActiveRFSensor2()))
                 .isInstanceOf(InvalidSensorException.class)
@@ -83,6 +81,7 @@ class RFSensorValidationServiceTest {
     @Test
     void shouldThrowInvalidSensorExceptionWhenRegisteringAndNewSensorIpIsNotDistinct() {
         when(rfSensorRepository.existsSensorByIp(any())).thenReturn(TRUE);
+        when(rfSensorRepository.findByIp(any())).thenReturn(List.of(correctActiveRFSensor()));
 
         assertThatThrownBy(() -> rfSensorValidationService.validateRegisterSensor(correctActiveRFSensor()))
                 .isInstanceOf(InvalidSensorException.class)

@@ -22,7 +22,7 @@ public class RFSensorSampleData {
     public static RFSensor correctInactiveRFSensor() {
         return RFSensor.builder()
                 .id("5ff8832b9d260a2bebb6a82d")
-                .ip("22.222.2.22")
+                .ip("23.232.2.22")
                 .sensorStatus(INACTIVE)
                 .maxFrequency(2.0)
                 .minFrequency(1.0)
