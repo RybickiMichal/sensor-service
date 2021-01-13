@@ -42,7 +42,7 @@ public class CameraController {
         return cameraService.getActiveCameraSensors();
     }
 
-    @GetMapping(value = "/camera/register-service/{cameraSensorId}/{cameraServicePort}")
+    @PostMapping(value = "/camera/register-service/{cameraSensorId}/{cameraServicePort}")
     public Camera registerCameraServiceToCameraSensor(@PathVariable String cameraSensorId, @PathVariable int cameraServicePort) {
         return cameraService.registerCameraServiceToCameraSensor(cameraSensorId, cameraServicePort);
     }
