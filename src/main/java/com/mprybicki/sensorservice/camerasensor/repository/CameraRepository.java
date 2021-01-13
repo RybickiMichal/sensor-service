@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CameraRepository extends MongoRepository<Camera, String> {
@@ -16,5 +17,7 @@ public interface CameraRepository extends MongoRepository<Camera, String> {
 
     boolean existsByIpAndSensorStatus(String ip, SensorStatus sensorStatus);
 
-    Camera findByIdAndSensorStatus(String ip, SensorStatus sensorStatus);
+    Camera findByIdAndSensorStatus(String id, SensorStatus sensorStatus);
+
+    Optional<Camera> findFirstByCameraServicePortIsNull();
 }

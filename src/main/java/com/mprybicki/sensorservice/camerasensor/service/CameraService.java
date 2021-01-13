@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.mprybicki.sensorservice.common.model.SensorOperation.REGISTERED;
 import static com.mprybicki.sensorservice.common.model.SensorOperation.UNREGISTERED;
@@ -72,5 +73,10 @@ public class CameraService implements SensorService {
         camera.setCameraServicePort(cameraServicePort);
         cameraRepository.save(camera);
         return camera;
+    }
+
+    //TODO write tests
+    public Optional<Camera> getFirstCameraSensorWithoutRegisteredCameraService() {
+        return cameraRepository.findFirstByCameraServicePortIsNull();
     }
 }

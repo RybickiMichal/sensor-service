@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -41,8 +42,13 @@ public class CameraController {
         return cameraService.getActiveCameraSensors();
     }
 
-    @GetMapping(value = "/camera/register-agent/{cameraSensorId}/{cameraServicePort}")
+    @GetMapping(value = "/camera/register-service/{cameraSensorId}/{cameraServicePort}")
     public Camera registerCameraServiceToCameraSensor(@PathVariable String cameraSensorId, @PathVariable int cameraServicePort) {
         return cameraService.registerCameraServiceToCameraSensor(cameraSensorId, cameraServicePort);
+    }
+
+    @GetMapping(value = "/camera/not-registered-to-camera-service")
+    public Optional<Camera> getFirstCameraSensorWithoutRegisteredCameraService() {
+        return cameraService.getFirstCameraSensorWithoutRegisteredCameraService();
     }
 }
