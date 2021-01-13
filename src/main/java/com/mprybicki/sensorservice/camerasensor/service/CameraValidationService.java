@@ -33,6 +33,15 @@ public class CameraValidationService {
         validateIsSensorIpDistinct(oldSensor, newSenor, "Sensor with given IP is already registered, try to unregister it");
     }
 
+    public void validateRegisterCameraServiceToCameraSensor(Camera camera) {
+        if(camera == null){
+            throw new InvalidSensorException("Cannot register camera service to camera sensor. There is no sensor with given ip");
+        }
+        if(camera.getCameraServicePort() != null){
+            throw new InvalidSensorException("There is already registered camera service to this camera sensor");
+        }
+    }
+
     private void validateIsSensorActive(Sensor sensor, String errorMessage) {
         if (sensor.getSensorStatus().equals(INACTIVE)) {
             throw new InvalidSensorException(errorMessage);
@@ -44,7 +53,7 @@ public class CameraValidationService {
             return;
         }
         if (cameraRepository.existsSensorByIp(newSensor.getIp())
-                && cameraRepository.findByIp(newSensor.getIp()).stream().anyMatch(rfSensor -> rfSensor.getSensorStatus().equals(ACTIVE))) {
+                && cameraRepository.existsByIpAndSensorStatus(newSensor.getIp(), ACTIVE)) {
             throw new InvalidSensorException(errorMessage);
         }
     }

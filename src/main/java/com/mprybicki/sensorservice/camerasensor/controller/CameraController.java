@@ -1,8 +1,8 @@
 package com.mprybicki.sensorservice.camerasensor.controller;
 
+import com.mprybicki.sensorservice.camerasensor.service.CameraService;
 import com.mprybicki.sensorservice.common.model.Camera;
 import com.mprybicki.sensorservice.common.model.Sensor;
-import com.mprybicki.sensorservice.camerasensor.service.CameraService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,4 +41,8 @@ public class CameraController {
         return cameraService.getActiveCameraSensors();
     }
 
+    @GetMapping(value = "/camera/register-agent/{cameraSensorIp}/{cameraServicePort}")
+    public Camera registerCameraServiceToCameraSensor(@PathVariable String cameraSensorIp, @PathVariable int cameraServicePort) {
+        return cameraService.registerCameraServiceToCameraSensor(cameraSensorIp, cameraServicePort);
+    }
 }

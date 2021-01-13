@@ -9,11 +9,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Optional;
 
 import static com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData.correctActiveCamera;
 import static com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData.correctActiveCamera2;
+import static com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData.correctActiveCameraRegisteredToCameraSensor;
 import static com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData.correctInactiveCamera;
 import static com.mprybicki.sensorservice.rfsensor.sampledata.RFSensorSampleData.correctActiveRFSensor;
 import static java.lang.Boolean.TRUE;
@@ -76,7 +76,7 @@ class CameraValidationServiceTest {
     void shouldThrowInvalidSensorExceptionWhenUpdatingAndNewSensorIpIsNotDistinct() {
         when(cameraRepository.findById(any())).thenReturn(Optional.of(correctActiveCamera()));
         when(cameraRepository.existsSensorByIp(any())).thenReturn(TRUE);
-        when(cameraRepository.findByIp(any())).thenReturn(List.of(correctActiveCamera()));
+        when(cameraRepository.existsByIpAndSensorStatus(any(), any())).thenReturn(TRUE);
 
         assertThatThrownBy(() -> cameraValidationService.validateUpdateSensor(any(), correctActiveCamera2()))
                 .isInstanceOf(InvalidSensorException.class)
@@ -86,7 +86,7 @@ class CameraValidationServiceTest {
     @Test
     void shouldThrowInvalidSensorExceptionWhenRegisteringAndNewSensorIpIsNotDistinct() {
         when(cameraRepository.existsSensorByIp(any())).thenReturn(TRUE);
-        when(cameraRepository.findByIp(any())).thenReturn(List.of(correctActiveCamera()));
+        when(cameraRepository.existsByIpAndSensorStatus(any(), any())).thenReturn(TRUE);
 
         assertThatThrownBy(() -> cameraValidationService.validateRegisterSensor(correctActiveCamera()))
                 .isInstanceOf(InvalidSensorException.class)
@@ -105,6 +105,25 @@ class CameraValidationServiceTest {
         when(cameraRepository.findById(any())).thenReturn(Optional.of(correctActiveCamera()));
 
         assertDoesNotThrow(() -> cameraValidationService.validateUpdateSensor(any(), correctActiveRFSensor()));
+    }
+
+    @Test
+    void shouldPassRegisteringCameraServiceToCameraSensorValidation() {
+        assertDoesNotThrow(() -> cameraValidationService.validateRegisterCameraServiceToCameraSensor(correctActiveCamera()));
+    }
+
+    @Test
+    void shouldNotPassRegisteringCameraServiceToCameraSensorWhenGivenCameraDoesNotExistValidation() {
+        assertThatThrownBy(() -> cameraValidationService.validateRegisterCameraServiceToCameraSensor(null))
+                .isInstanceOf(InvalidSensorException.class)
+                .hasMessage("Cannot register camera service to camera sensor. There is no sensor with given ip");
+    }
+
+    @Test
+    void shouldNotPassRegisteringCameraServiceToCameraSensorWhenGivenCameraHasAlreadyRegisteredService() {
+        assertThatThrownBy(() -> cameraValidationService.validateRegisterCameraServiceToCameraSensor(correctActiveCameraRegisteredToCameraSensor()))
+                .isInstanceOf(InvalidSensorException.class)
+                .hasMessage("There is already registered camera service to this camera sensor");
     }
 
 }

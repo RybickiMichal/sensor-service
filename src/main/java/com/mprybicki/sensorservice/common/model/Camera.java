@@ -2,6 +2,7 @@ package com.mprybicki.sensorservice.common.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,6 +23,9 @@ public class Camera extends Sensor {
     @NotNull
     @Valid
     private PanTiltZoom panTiltZoom;
+
+    @Setter
+    private Integer cameraServicePort;
 
     @Builder
     public Camera(String id, String ip, SensorStatus sensorStatus, String streamAddress, PanTiltZoom panTiltZoom) {

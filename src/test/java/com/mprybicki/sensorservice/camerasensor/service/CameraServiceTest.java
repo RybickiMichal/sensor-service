@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData.cameraSensors;
 import static com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData.correctActiveCamera;
+import static com.mprybicki.sensorservice.camerasensor.sampledata.CameraSampleData.correctActiveCameraRegisteredToCameraSensor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -71,5 +72,15 @@ class CameraServiceTest {
         assertThat(cameraSensors)
                 .usingRecursiveComparison()
                 .isEqualTo(cameraSensors());
+    }
+
+    @Test
+    void shouldRegisterCameraServiceToCameraAgent() {
+        when(cameraRepository.findByIpAndSensorStatus(any(), any())).thenReturn(correctActiveCamera());
+        Camera cameraRegisteredToCameraAgent = cameraService.registerCameraServiceToCameraSensor("1.1.1.1", 8000);
+
+        assertThat(cameraRegisteredToCameraAgent)
+                .usingRecursiveComparison()
+                .isEqualTo(correctActiveCameraRegisteredToCameraSensor());
     }
 }

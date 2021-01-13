@@ -4,6 +4,7 @@ import com.mprybicki.sensorservice.camerasensor.repository.CameraRepository;
 import com.mprybicki.sensorservice.common.model.Camera;
 import com.mprybicki.sensorservice.common.model.CameraDTO;
 import com.mprybicki.sensorservice.common.model.Sensor;
+import com.mprybicki.sensorservice.common.model.SensorStatus;
 import com.mprybicki.sensorservice.common.service.SensorService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,5 +65,13 @@ public class CameraService implements SensorService {
 
     public List<Camera> getActiveCameraSensors() {
         return cameraRepository.findBySensorStatus(ACTIVE);
+    }
+
+    public Camera registerCameraServiceToCameraSensor(String cameraIp, int cameraServicePort) {
+        Camera camera = cameraRepository.findByIpAndSensorStatus(cameraIp, ACTIVE);
+        cameraValidationService.validateRegisterCameraServiceToCameraSensor(camera);
+        camera.setCameraServicePort(cameraServicePort);
+        cameraRepository.save(camera);
+        return camera;
     }
 }
