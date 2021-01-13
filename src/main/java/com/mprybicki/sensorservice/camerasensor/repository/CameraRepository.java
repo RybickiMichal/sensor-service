@@ -16,5 +16,5 @@ public interface CameraRepository extends MongoRepository<Camera, String> {
 
     boolean existsByIpAndSensorStatus(String ip, SensorStatus sensorStatus);
 
-    Camera findByIpAndSensorStatus(String ip, SensorStatus sensorStatus);
+    Camera findByIdAndSensorStatus(String ip, SensorStatus sensorStatus);
 }
