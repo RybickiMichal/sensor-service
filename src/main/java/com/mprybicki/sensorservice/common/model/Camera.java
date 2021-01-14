@@ -24,6 +24,7 @@ public class Camera extends Sensor {
     @Valid
     private PanTiltZoom panTiltZoom;
 
+    //TODO Change it to URL.
     @Setter
     private Integer cameraServicePort;
 
