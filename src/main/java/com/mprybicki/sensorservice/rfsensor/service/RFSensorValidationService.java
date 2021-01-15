@@ -3,6 +3,7 @@ package com.mprybicki.sensorservice.rfsensor.service;
 import com.mprybicki.sensorservice.common.exception.InvalidSensorException;
 import com.mprybicki.sensorservice.common.model.RFSensor;
 import com.mprybicki.sensorservice.common.model.Sensor;
+import com.mprybicki.sensorservice.common.model.SensorStatus;
 import com.mprybicki.sensorservice.rfsensor.repository.RFSensorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,8 +44,7 @@ public class RFSensorValidationService {
         if (oldSensor != null && oldSensor.getIp().equals(newSensor.getIp())) {
             return;
         }
-        if (rfSensorRepository.existsSensorByIp(newSensor.getIp())
-                && rfSensorRepository.findByIp(newSensor.getIp()).stream().anyMatch(rfSensor -> rfSensor.getSensorStatus().equals(ACTIVE))) {
+        if (rfSensorRepository.existsSensorByIpAndSensorStatus(newSensor.getIp(), ACTIVE)) {
             throw new InvalidSensorException(errorMessage);
         }
     }

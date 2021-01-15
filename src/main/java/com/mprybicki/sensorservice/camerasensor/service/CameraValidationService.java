@@ -52,8 +52,7 @@ public class CameraValidationService {
         if (oldSensor != null && oldSensor.getIp().equals(newSensor.getIp())) {
             return;
         }
-        if (cameraRepository.existsSensorByIp(newSensor.getIp())
-                && cameraRepository.existsByIpAndSensorStatus(newSensor.getIp(), ACTIVE)) {
+        if (cameraRepository.existsByIpAndSensorStatus(newSensor.getIp(), ACTIVE)) {
             throw new InvalidSensorException(errorMessage);
         }
     }
