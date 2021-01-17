@@ -75,7 +75,6 @@ public class CameraService implements SensorService {
         return camera;
     }
 
-    //TODO write tests
     public Optional<Camera> getFirstCameraSensorWithoutRegisteredCameraService() {
         return cameraRepository.findFirstByCameraServicePortIsNull();
     }
