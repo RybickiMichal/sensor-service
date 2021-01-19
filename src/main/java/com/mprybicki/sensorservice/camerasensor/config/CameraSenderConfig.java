@@ -40,7 +40,7 @@ public class CameraSenderConfig {
     }
 
     @Bean
-    public CameraSenderService cameraSender() {
-        return new CameraSenderService();
+    public CameraSenderConfig cameraSender() {
+        return new CameraSenderConfig();
     }
 }
