@@ -14,6 +14,10 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG;
+import static org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG;
+import static org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG;
+
 
 @Configuration
 public class RFSensorSenderConfig {
@@ -24,9 +28,9 @@ public class RFSensorSenderConfig {
     @Bean
     public ProducerFactory<String, RFSensorDTO> producerRSSensorFactory() {
         Map<String, Object> configProperties = new HashMap<>();
-        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
-        configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configProperties.put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
+        configProperties.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProperties.put(VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProperties);
     }
 

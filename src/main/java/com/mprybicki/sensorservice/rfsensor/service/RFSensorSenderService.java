@@ -15,11 +15,14 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 @Slf4j
 public class RFSensorSenderService {
 
-    @Autowired
     private KafkaTemplate<String, RFSensorDTO> kafkaTemplate;
 
     @Value("${kafka.rf.sensor.topic}")
     private String kafkaTopic;
+
+    public RFSensorSenderService(KafkaTemplate<String, RFSensorDTO> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     public void send(RFSensorDTO rfSensorDTO) {
         ListenableFuture<SendResult<String, RFSensorDTO>> future = kafkaTemplate.send(kafkaTopic, rfSensorDTO);

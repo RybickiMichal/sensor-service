@@ -15,11 +15,14 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 @Slf4j
 public class CameraSenderService {
 
-    @Autowired
     private KafkaTemplate<String, CameraDTO> kafkaTemplate;
 
     @Value("${kafka.camera.topic}")
     private String kafkaTopic;
+
+    public CameraSenderService(KafkaTemplate<String, CameraDTO> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     public void send(CameraDTO cameraDTO) {
         ListenableFuture<SendResult<String, CameraDTO>> future = kafkaTemplate.send(kafkaTopic, cameraDTO);
